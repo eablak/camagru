@@ -12,6 +12,8 @@ spl_autoload_register(function ($className){
 
 });
 
+include ("database.php");
+
 
 use App\Router;
 use App\Controllers\HomeController;
