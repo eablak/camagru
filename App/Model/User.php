@@ -2,6 +2,7 @@
 
 namespace App\Model;
 use PDO;
+use PDOException;
 
 class User{
 
@@ -13,8 +14,17 @@ class User{
 
     public function register(string $username , string $password, string $email){
 
-        $sql = "INSERT INTO users (username, password, email) VALUES ('$username', '$password', '$email')";
-        return $this->conn->exec($sql);
+        try{
+
+            $stmt = $this->conn->prepare("INSERT INTO users (username, password, email) VALUES (:username, :password, :email)");
+            $result = $stmt->execute(['username' => $username, 'password' => $password, 'email' => $email]);
+
+            return 1;
+            
+        }catch(PDOException $e){
+            if ($e->getCode() == '23000')
+                return -1;
+        }
     }
 
 
