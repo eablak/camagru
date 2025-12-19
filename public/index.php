@@ -1,40 +1,26 @@
 <?php
 
-declare(strict_types=1);
+spl_autoload_register(function ($className){
 
-// echo $_SERVER["REQUEST_URI"]; -> catch the url and send to routes
-$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $base_dir = dirname(__DIR__) . '/';
+    $className = str_replace('\\', '/', $className);
+    $file = $base_dir . $className . '.php';
 
-require "router.php";
+    if (file_exists($file)){
+        include $file;
+    }
+
+});
+
+
+use App\Router;
+use App\Controllers\HomeController;
 
 $router = new Router();
 
-$router->add("/", function(){
-    echo "This is homepage";
-});
-$router->add("/about", function(){
-    echo "This is about page";
-});
-$router->add("/products/{id}", function($id){
-    echo "This is page for product $id";
-});
-$router->add("/products/{id}/orders/{oreder_id}", function($id, $order_id){
-    echo "This is page for product $id and order $order_id";
-});
+$router->get('/', [HomeController::class, 'index']);
+$router->get('/about', [HomeController::class, 'about']);
 
-$router->dispatch($path);
-
-
-/*
-switch($path){
-    case "/":
-        echo "This is homepage";
-        break;
-    case "/about":
-        echo "This is about page";
-        break;
-    default:
-        echo "Page not found";
-} */
+echo $router->resolve();
 
 ?>
