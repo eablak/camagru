@@ -1,16 +1,31 @@
 <?php
 
+namespace App;
 
-$db_server = "localhost";
-$db_user = "phpmyadmin";
-$db_pass = "phpmyadmin";
-$db_name = "camagru";
-$conn = "";
+use PDO;
+use PDOException;
 
-try{
-    $conn = mysqli_connect($db_server, $db_user, $db_pass, $db_name);
-}catch (mysqli_sql_exception){
-    echo "Could not connect!";
+class Database{
+
+    private static $username = "phpmyadmin";
+    private static $password = "phpmyadmin";
+    private static $db_name = "camagru";
+    private static $dsn = "mysql:host=localhost;dbname=camagru;charset=utf8";
+
+    public static function connect(){
+        try{
+
+            $pdo = new PDO(self::$dsn, self::$username, self::$password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // echo "Connection success";
+        }catch (PDOException $e){
+            error_log(date('Y-m-d: H:i:s') . "Database connection error" . $e->getMessage(), 3, "error.log");
+            throw new Exception("Database connection failed");
+        }
+
+        return $pdo;
+    }
 }
+
 
 ?>

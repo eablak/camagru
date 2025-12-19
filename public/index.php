@@ -17,11 +17,13 @@ include ("database.php");
 
 use App\Router;
 use App\Controllers\HomeController;
+use App\Controllers\UserController;
 
 $router = new Router();
 
 $router->get('/', [HomeController::class, 'index']);
-$router->get('/about', [HomeController::class, 'about']);
+$router->get('/register', [UserController::class, 'register']);
+$router->post('/register', [UserController::class, 'register']);
 
 echo $router->resolve();
 
