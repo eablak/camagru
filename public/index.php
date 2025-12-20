@@ -24,6 +24,7 @@ $router = new Router();
 $router->get('/', [HomeController::class, 'index']);
 $router->get('/register', [UserController::class, 'register']);
 $router->post('/register', [UserController::class, 'register']);
+$router->get('/activate_account', [UserController::class, 'activate_account']);
 
 echo $router->resolve();
 

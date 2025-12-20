@@ -1,13 +1,16 @@
 <?php
 
 include("database.php");
+use App\Database;
+
 
 
 $sql_user = "CREATE TABLE users (
 id INT AUTO_INCREMENT PRIMARY KEY,
 username VARCHAR(30) NOT NULL UNIQUE,
 password VARCHAR(150) NOT NULL,
-email VARCHAR(50) NOT NULL UNIQUE )";
+email VARCHAR(50) NOT NULL UNIQUE,
+account_activation_hash VARCHAR(150) UNIQUE )";
 
 
 $sql_gallery = "CREATE TABLE galleries (
@@ -39,11 +42,18 @@ FOREIGN KEY (photo_id) REFERENCES galleries(id) )";
 
 
 try{
-    if ($conn->query($sql_user) === TRUE && $conn->query($sql_gallery) === TRUE && $conn->query($sql_like) === TRUE && $conn->query($sql_comment) === TRUE) {
-        echo "All tables created successfully\n";
-    }
-}catch(mysqli_sql_exception){
-  echo "Error creating table: " . $conn->error . "\n";
+  
+  $pdo = Database::connect();
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  $pdo->exec($sql_user);
+  $pdo->exec($sql_gallery);
+  $pdo->exec($sql_like);
+  $pdo->exec($sql_comment);
+
+  echo "All tables created successfully\n";
+}catch(PDOException $e){
+  echo "Error creating table: " . $e->getMessage() . "\n";
 }
 
 ?>
