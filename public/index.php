@@ -25,6 +25,8 @@ $router->get('/', [HomeController::class, 'index']);
 $router->get('/register', [UserController::class, 'register']);
 $router->post('/register', [UserController::class, 'register']);
 $router->get('/activate_account', [UserController::class, 'activate_account']);
+$router->get('/login', [UserController::class, 'login']);
+$router->post('/login', [UserController::class, 'login']);
 
 echo $router->resolve();
 

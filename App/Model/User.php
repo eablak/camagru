@@ -65,6 +65,31 @@ class User{
     }
 
 
+
+    public function login(string $username, string $password): int|array{
+
+        try{
+
+            $stmt = $this->conn->prepare("SELECT * FROM users WHERE username=?");
+
+            $stmt->execute([$username]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password'])){
+                if ($user['account_activation_hash'] === '1'){
+                    return $user;
+                }else{
+                    return -1;
+                }
+            }
+
+        }catch(PDOExceptioon $e){
+
+        }
+        return 0;
+    }
+
+
 }
 
 

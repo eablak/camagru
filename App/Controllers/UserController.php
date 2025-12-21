@@ -125,6 +125,32 @@ class UserController{
     }
 
 
+    public function login(){
+
+        $message = "";
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
+            $result = $this->userModel->login($_POST['username'], $_POST['password']);
+
+            if ($result == -1){
+                $message = "Please activate your account first!";
+            }elseif($result == 0){
+                $message = "Invalid credentials!";
+            }else{
+                session_start();
+                $_SESSION['username'] = $user['username'];
+                $name = $result['username'];
+                $message = "Welcome $name!";
+            }
+
+        }
+
+        
+        include $this->file_path . '/login.html';
+    }
+
+
 
 
 }
