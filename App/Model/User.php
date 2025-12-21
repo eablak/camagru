@@ -90,6 +90,72 @@ class User{
     }
 
 
+    public function reset_password_hashes(string $email): string|bool{
+
+        $token = bin2hex(random_bytes(16));
+        $token_hash = hash("sha256", $token);
+        $expiry = date("Y-m-d H:i:s", time() + 60*30);
+
+        $sql = "UPDATE users SET reset_token_hash = :reset_token_hash, reset_token_expires_at = :reset_token_expires_at WHERE email = :email";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['reset_token_hash' => $token_hash, 'reset_token_expires_at' => $expiry, 'email' => $email]);
+
+        if ($stmt->rowCount())
+            return $token;
+        return false;
+
+    }
+
+    public function reset_password_mail(string $reset_token_hash){
+
+        $token_hash = hash("sha256", $reset_token_hash);
+        $sql = "SELECT * FROM users WHERE reset_token_hash = :reset_token_hash";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['reset_token_hash' => $token_hash]);
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($user === false)
+            return -1;
+
+        if (strtotime($user['reset_token_expires_at']) <= time())
+            return -2;
+
+    }
+
+
+    
+    public function process_reset_password(string $token, string $password){
+
+        $token_hash = hash("sha256", $token);
+
+        $sql = "SELECT * FROM users WHERE reset_token_hash = :reset_token_hash";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['reset_token_hash' => $token_hash]);
+
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($user === false)
+            return -1;
+
+        if (strtotime($user['reset_token_expires_at']) <= time())
+            return -2;
+
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "UPDATE users SET password = :password_hash, reset_token_hash = :reset_token_hash, reset_token_expires_at = :reset_token_expires_at WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['password_hash' => $password_hash, 'reset_token_hash' => NULL, 'reset_token_expires_at' => NULL, 'id' => $user['id']]);
+
+        return 1;
+    }
+
+
+
 }
 
 

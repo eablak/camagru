@@ -35,7 +35,7 @@ class UserController{
     }
 
 
-    public function mailer(string $email, string $activation_token){
+    public function mailer(){
 
         $mail = new PHPMailer(true);
 
@@ -90,7 +90,7 @@ class UserController{
                 
                 $result = $this->userModel->register($name, $password, $email, $activation_token_hash);
 
-                $mail = $this->mailer($email, $activation_token);
+                $mail = $this->mailer();
                 
                 if ($result === 1){
                     $mail->setFrom('esrablk9@gmail.com', 'camagru');
@@ -139,7 +139,7 @@ class UserController{
                 $message = "Invalid credentials!";
             }else{
                 session_start();
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['username'] = $result['username'];
                 $name = $result['username'];
                 $message = "Welcome $name!";
             }
@@ -150,8 +150,86 @@ class UserController{
         include $this->file_path . '/login.html';
     }
 
+    
+    public function reset_password_mail(){
+        
+        if ($_SERVER["REQUEST_METHOD"] === "GET"){
+            
+            $token = $_GET["token"];
+            $result = $this->userModel->reset_password_mail($token);
+    
+            if ($result === -1)
+                die("Token not found!");
+            elseif ($result === -2)
+                die("Token has expired!");
+        }
 
 
+        if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
+            $token = $_POST["token"];
+            $password = $_POST["password"];
+            $password_confirmation = $_POST["password_confirmation"];
+            $message = "";
+    
+    
+            if (strlen($password) < 8)
+                $message = "Password must be at least 8 character";
+            elseif (!preg_match("/[a-z]/i", $password))
+                $message = "Password must contain at least one letter";
+            elseif (!preg_match("/[0-9]/", $password))
+                $message = "Password must contain at least one number";
+            elseif ($password !== $password_confirmation)
+                $message = "Passwords must match";
+            else{
+                $result = $this->userModel->process_reset_password($token, $password);
+                if ($result === -1)
+                    echo "Token not found!";
+                elseif ($result === -2)
+                    echo "Token has expired!";
+                else
+                    $message = "Password updated. You can now login.";
+            }
+        }
+        include $this->file_path . '/reset_password_mail.html';
+    }
+
+
+    public function reset_password(){
+
+        $message = "";
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
+            $email = $_POST['email'];
+            
+            $token = $this->userModel->reset_password_hashes($email);
+            if ($token){
+                
+                $mail = $this->mailer();
+
+                $mail->setFrom('esrablk9@gmail.com', 'camagru');
+                $mail->addAddress($email);
+                $mail->Subject = "Reset Password";
+                $mail->Body = <<<END
+                Click <a href="http://localhost:8000/reset_password_mail?token=$token">here</a> 
+                to activate your account.
+                END;
+
+                try {
+                    $mail->send();
+                } catch (Exception $e) {
+                    echo "Message could not be sent. Mailer error: {$mail->ErrorInfo}";
+                }
+
+                $message = "Email send!";
+
+            }else{
+                $message = "Password hashing error!";
+            }
+        }
+        include $this->file_path . '/reset_password.html';
+    }
 
 }
 

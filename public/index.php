@@ -27,6 +27,12 @@ $router->post('/register', [UserController::class, 'register']);
 $router->get('/activate_account', [UserController::class, 'activate_account']);
 $router->get('/login', [UserController::class, 'login']);
 $router->post('/login', [UserController::class, 'login']);
+$router->get('/reset_password', [UserController::class, 'reset_password']);
+$router->post('/reset_password', [UserController::class, 'reset_password']);
+$router->get('/reset_password_mail', [UserController::class, 'reset_password_mail']);
+$router->post('/reset_password_mail', [UserController::class, 'reset_password_mail']);
+$router->get('/process_reset_password', [UserController::class, 'process_reset_password']);
+$router->post('/process_reset_password', [UserController::class, 'process_reset_password']);
 
 echo $router->resolve();
 
