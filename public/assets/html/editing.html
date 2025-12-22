@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Editing Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    >
+<link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<link href="/assets/css/editing.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+                </ul>
+            </div>
+        </nav>
+	</header>
+
+
+	<main id="content">
+        <section id="main-content"> 
+            
+            <video id='video'
+                width="900" 
+                height="600" 
+                autoplay playsinline>
+                Sorry, video element not supported in your browsers
+            </video>
+            <div id="error"></div>
+            <div id="button-container">
+                <button onclick="openCamera()"> Open Camera</button>
+                <!-- Close Camera button -->
+                <button onclick='closeCamera()'>Close Camera</button>
+            </div>
+
+
+        </section>
+        <aside id="side-content">
+            <!-- thumbnails -->
+        </aside>
+    </main>
+    
+
+
+	 <footer>
+		<p class="p">Author: eablak</p>
+		<p class="p"><a href="#">eablak@student.42istanbul.com.tr</a></p>
+	</footer> 
+</body>
+
+<script src="/assets/js/userMedia.js"></script>
+
+</html>

@@ -18,6 +18,7 @@ include ("database.php");
 use App\Router;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+use App\Controllers\EditingController;
 
 $router = new Router();
 
@@ -33,6 +34,7 @@ $router->get('/reset_password_mail', [UserController::class, 'reset_password_mai
 $router->post('/reset_password_mail', [UserController::class, 'reset_password_mail']);
 $router->get('/process_reset_password', [UserController::class, 'process_reset_password']);
 $router->post('/process_reset_password', [UserController::class, 'process_reset_password']);
+$router->get('/editing', [EditingController::class, 'editing_index']);
 
 echo $router->resolve();
 

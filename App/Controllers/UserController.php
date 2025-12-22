@@ -142,6 +142,7 @@ class UserController{
                 $_SESSION['username'] = $result['username'];
                 $name = $result['username'];
                 $message = "Welcome $name!";
+                header("Location: /editing");
             }
 
         }
