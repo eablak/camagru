@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Editing Page</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    >
-<link rel="stylesheet" href=
-"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
-<link href="/assets/css/editing.css" rel="stylesheet" type="text/css" media="all" />
-</head>
+    <head>
+        <title>Editing Page</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+        <link href="/assets/css/editing.css" rel="stylesheet" type="text/css" media="all" />
+        
+    </head>
 <body>
 
 	<header>
@@ -45,32 +45,63 @@
 	<main id="content">
         <section id="main-content"> 
             
-            <video id='video'
-                width="900" 
-                height="600" 
-                autoplay playsinline>
-                Sorry, video element not supported in your browsers
-            </video>
+            <div id="video-wrapper">
+                <video id='video'
+                    width="900" 
+                    height="600" 
+                    autoplay playsinline>
+                    Sorry, video element not supported in your browsers
+                </video>
+                <img id="superposable-img" src=""/>
+            </div>
+
             <div id="error"></div>
+
             <div id="button-container">
-                <button onclick="openCamera()"> Open Camera</button>
-                <!-- Close Camera button -->
+                <button onclick="openCamera()">Open Camera</button>
+                <button onclick="captureImage()">Capture Image</button>
                 <button onclick='closeCamera()'>Close Camera</button>
             </div>
 
+            <div id="superposable-container">
+                
+                <label>
+                    <input class='obj' type="radio" name="obj" onclick="enable()" id="cat" value="cat"/>
+                    <img src="/assets/img/thumbnails/img1.png">
+                </label>
+                <label>
+                    <input class="obj" type="radio" name="obj" onclick="enable()" id="mouse" value="mouse"/>
+                    <img src="/assets/img/thumbnails/img2.png">
+                </label>
+                <label>
+                    <input class="obj" type="radio" name="obj" onclick="enable()" id="hamster" value="hamster"/>
+                    <img src="/assets/img/thumbnails/img3.png">
+                </label>
+                <label>
+                    <input class="obj" type="radio" name="obj" onclick="enable()" id="dog" value="dog"/>
+                    <img src="/assets/img/thumbnails/img4.png">
+                </label>
+                <label>
+                    <input class="obj" type="radio" name="obj" onclick="enable()" id="duck" value="duck"/>
+                    <img src="/assets/img/thumbnails/img5.png">
+                </label>
+
+            </div>
 
         </section>
+
         <aside id="side-content">
             <!-- thumbnails -->
         </aside>
     </main>
-    
+
 
 
 	 <footer>
 		<p class="p">Author: eablak</p>
 		<p class="p"><a href="#">eablak@student.42istanbul.com.tr</a></p>
 	</footer> 
+
 </body>
 
 <script src="/assets/js/userMedia.js"></script>

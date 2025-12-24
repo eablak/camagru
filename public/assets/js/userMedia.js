@@ -1,49 +1,106 @@
 const videoElem = document.getElementById('video');
 const errorElem = document.getElementById('error');
-let receivedMediaStream = null;
+const catElem = document.getElementById('cat');
+const mouseElem = document.getElementById('mouse');
+const hamsterElem = document.getElementById('hamster');
+const dogElem = document.getElementById('dog');
+const duckElem = document.getElementById('duck');
+const imgPositionElem = document.getElementById('superposable-img');
+const radElem = document.getElementsByName('obj');
 
-//Declare the MediaStreamConstraints object
+let receivedMediaStream = null;
+var prev = null;
+
+for(var i=0; i<radElem.length; i++){
+    radElem[i].addEventListener('change', function() {
+        (prev) ? console.log(prev.value): null;
+        if (this !== prev)
+            prev = this;
+        console.log(this.value)
+    })
+}
+
 const constraints = {
-    audio: true,
+    audio: false,
     video: true
 }
 
 function openCamera() {
-//Ask the User for the access of the device camera and microphone
     navigator.mediaDevices.getUserMedia(constraints)
         .then(mediaStream => {
-            // The received mediaStream contains both the 
-            // video and audio media data
-
-//Add the mediaStream directly to the source of the video element
-            // using the srcObject attribute
             videoElem.srcObject = mediaStream;
-
-            // make the received mediaStream available globally
             receivedMediaStream = mediaStream;
-
+            errorElem.innerHTML = "";
         }).catch(err => {
-            // handling the error if any
             errorElem.innerHTML = err;
             errorElem.style.display = "block";
         });
-
 }
-
 
 const closeCamera = () => {
     if (!receivedMediaStream) {
         errorElem.innerHTML = "Camera is already closed!";
         errorElem.style.display = "block";
     } else {
-/* MediaStream.getTracks() returns an array of all the 
-MediaStreamTracks being used in the received mediaStream
-we can iterate through all the mediaTracks and 
-stop all the mediaTracks by calling its stop() method*/
         receivedMediaStream.getTracks().forEach(mediaTrack => {
             mediaTrack.stop();
         });
-        errorElem.innerHTML = "Camera closed successfully!"
+        errorElem.innerHTML = "Camera closed successfully!";
         errorElem.style.display = "block";
+        videoElem.srcObject = null;
     }
+}
+
+function captureImage() {
+
+    var selectedRadio = document.getElementsByName('obj');
+    var isSelected = false;
+    var nameSelected = "";
+    
+    for(i=0; i<selectedRadio.length; i++){
+        if (selectedRadio[i].checked){
+            document.getElementById("error").innerHTML = selectedRadio[i].value;
+            isSelected = true;
+            nameSelected = selectedRadio[i].value;
+        }
+    }
+
+    if (!isSelected && !receivedMediaStream){
+        document.getElementById("error").innerHTML = "Open camera and choose superposable image!"
+        return;
+    }
+    
+    if (!isSelected){
+        document.getElementById("error").innerHTML = "Please choose superposable image first!";
+        return;
+    }
+    
+    if (!receivedMediaStream) {
+        errorElem.innerHTML = "Open the camera first!";
+        errorElem.style.display = "block";
+        return;
+    }
+
+    var path = "/assets/img/thumbnails/";
+    switch(nameSelected){
+        case 'cat':
+            path += 'img1.png';
+        break;
+        case 'mouse':
+            path += 'img2.png';
+        break;
+        case 'hamster':
+            path += 'img3.png';
+        break;
+        case 'dog':
+            path += 'img4.png';
+        break;
+        case 'duck':
+            path += 'img5.png';
+        break;
+    }
+
+    imgPositionElem.src = path;
+
+
 }
