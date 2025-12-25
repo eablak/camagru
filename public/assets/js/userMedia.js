@@ -13,12 +13,39 @@ var prev = null;
 
 for(var i=0; i<radElem.length; i++){
     radElem[i].addEventListener('change', function() {
-        (prev) ? console.log(prev.value): null;
         if (this !== prev)
             prev = this;
-        console.log(this.value)
+        // console.log(this.value);
+        updatePath(this.value);
     })
 }
+
+function updatePath(nameSelected){
+
+    var path = "/assets/img/thumbnails/";
+    switch(nameSelected){
+        case 'cat':
+            path += 'img1.png';
+        break;
+        case 'mouse':
+            path += 'img2.png';
+        break;
+        case 'hamster':
+            path += 'img3.png';
+        break;
+        case 'dog':
+            path += 'img4.png';
+        break;
+        case 'duck':
+            path += 'img5.png';
+        break;
+    }
+
+    imgPositionElem.src = path;
+    imgPositionElem.style.display = "block";
+
+}
+
 
 const constraints = {
     audio: false,
@@ -47,8 +74,11 @@ const closeCamera = () => {
         });
         errorElem.innerHTML = "Camera closed successfully!";
         errorElem.style.display = "block";
-        videoElem.srcObject = null;
     }
+    videoElem.srcObject = null;
+    receivedMediaStream = null;
+    imgPositionElem.src = "";
+    imgPositionElem.style.display = "none";
 }
 
 function captureImage() {
@@ -59,7 +89,7 @@ function captureImage() {
     
     for(i=0; i<selectedRadio.length; i++){
         if (selectedRadio[i].checked){
-            document.getElementById("error").innerHTML = selectedRadio[i].value;
+            // document.getElementById("error").innerHTML = selectedRadio[i].value;
             isSelected = true;
             nameSelected = selectedRadio[i].value;
         }
@@ -81,26 +111,19 @@ function captureImage() {
         return;
     }
 
-    var path = "/assets/img/thumbnails/";
-    switch(nameSelected){
-        case 'cat':
-            path += 'img1.png';
-        break;
-        case 'mouse':
-            path += 'img2.png';
-        break;
-        case 'hamster':
-            path += 'img3.png';
-        break;
-        case 'dog':
-            path += 'img4.png';
-        break;
-        case 'duck':
-            path += 'img5.png';
-        break;
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "editing");
+    xhr.setRequestHeader("Content-type", 'application/json');
+
+    xhr.onload = function(){
+
+        const response = JSON.parse(xhr.responseText);
+        errorElem.style.color = "green";
+        errorElem.innerHTML = response.success + response.data;
     }
 
-    imgPositionElem.src = path;
+    json_data = {"webcam":"webcam verisi", "superposable":nameSelected};
 
-
+    xhr.send(JSON.stringify(json_data));
 }

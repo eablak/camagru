@@ -14,7 +14,23 @@ class EditingController{
     }
 
     public function editing_index(){
-        include $this->file_path . '/editing.html';
+        
+        if ($_SERVER["REQUEST_METHOD"] == "GET"){
+            include $this->file_path . '/editing.html';
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST"){
+
+            header('Content-Type: application/json; charset=utf-8');
+
+            $str = file_get_contents("php://input");
+            $json = json_decode($str, true);
+
+            echo json_encode(["success" => "succesfully sended", "data" => $json['superposable']]);
+            return ;
+        }
+
+
     }
 
 
