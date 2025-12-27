@@ -13,6 +13,27 @@ class EditingController{
         $this->db = Database::connect();
     }
 
+
+    public function saveImage(string $imageURL, string $selectedName){
+
+
+        $imageContent = base64_decode(str_replace("data:image/jpeg;base64,", "", $imageURL));
+
+        $imgFilePath = str_replace('/html', '/img/pictures/' ,$this->file_path);
+        $imgFilePath = $imgFilePath . "/image.png";
+
+        $ifp = fopen($imgFilePath, 'wb');
+        if (fwrite($ifp, $imageContent)){
+            fclose($ifp);
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
     public function editing_index(){
         
         if ($_SERVER["REQUEST_METHOD"] == "GET"){
@@ -26,7 +47,12 @@ class EditingController{
             $str = file_get_contents("php://input");
             $json = json_decode($str, true);
 
-            echo json_encode(["success" => "succesfully sended", "data" => $json['superposable']]);
+            if ($this->saveImage($json['webcam'], $json['superposable'])){
+                // $this->saveImageDB("userid", "photopath");
+                echo json_encode(["message" => "Image succesfully saved!"]);
+            } else{
+                echo json_encode(["message" => "Failed while saving image!"]);
+            }
             return ;
         }
 

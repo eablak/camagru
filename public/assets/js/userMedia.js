@@ -7,6 +7,9 @@ const dogElem = document.getElementById('dog');
 const duckElem = document.getElementById('duck');
 const imgPositionElem = document.getElementById('superposable-img');
 const radElem = document.getElementsByName('obj');
+let canvas = document.querySelector('#canvas');
+let dataurl = document.querySelector('#dataurl');
+let dataurl_container = document.querySelector('#dataurl-container');
 
 let receivedMediaStream = null;
 var prev = null;
@@ -111,19 +114,25 @@ function captureImage() {
         return;
     }
 
+    canvas.getContext('2d').drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+    let image_data_url = canvas.toDataURL('image/jpeg');
+    
+    // dataurl.value = image_data_url;
+    // dataurl_container.style.display = 'block';
     
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "editing");
     xhr.setRequestHeader("Content-type", 'application/json');
 
+
     xhr.onload = function(){
 
         const response = JSON.parse(xhr.responseText);
         errorElem.style.color = "green";
-        errorElem.innerHTML = response.success + response.data;
+        errorElem.innerHTML = response.message;
     }
 
-    json_data = {"webcam":"webcam verisi", "superposable":nameSelected};
+    json_data = {"webcam": image_data_url, "superposable":nameSelected};
 
     xhr.send(JSON.stringify(json_data));
 }
