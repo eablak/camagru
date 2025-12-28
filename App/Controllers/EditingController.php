@@ -2,19 +2,42 @@
 
 namespace App\Controllers;
 use App\Database;
+use App\Model\Editing;
 
 class EditingController{
 
     var $file_path;
 
     public function __construct(){
+
+        session_start();
+        if(!isset($_SESSION['user'])){
+            header("Location: /login");
+            exit;
+        }
+
         $this->file_path = dirname(__DIR__);
         $this->file_path = str_replace('/App', '/public/assets/html', $this->file_path);
         $this->db = Database::connect();
+        $this->editingModel = new Editing($this->db);
+        $this->thumbnailPath = "";
     }
 
 
-    public function saveImage(string $imageURL, string $selectedName){
+    public function imageName(){
+        
+        $currentUser = $_SESSION['user'];
+        $currentUserid = $_SESSION['id'];
+
+        $returnCount = $this->editingModel->userPhotoCount((int)($currentUserid));
+        
+        $fileName = "user_" . $currentUserid . "photo_" . $returnCount+1 . ".jpeg";
+        
+        return $fileName;
+    }
+
+
+    public function createImage(string $imageURL, string $selectedName){
 
 
         $imageContent = base64_decode(str_replace("data:image/jpeg;base64,", "", $imageURL));
@@ -80,13 +103,23 @@ class EditingController{
             imagecopyresampled($resizedOverlay, $pasteImage, 0, 0, 0, 0, $overlayW, $overlayH, $pngW, $pngH);
 
             imagecopy($webcamImage, $resizedOverlay, $destX, $destY, 0, 0, $overlayW, $overlayH);
-            imagejpeg($webcamImage, 'image_3.png', 95);
 
+            
+            $this->thumbnailPath = str_replace('html', 'img/thumbnails/', $this->file_path);
+            $this->thumbnailPath = $this->thumbnailPath . $this->imageName();
+            imagejpeg($webcamImage, $this->thumbnailPath, 95);
 
             return true;
         }
 
         return false;
+    }
+
+
+    public function saveImagetoDB(){
+
+        $this->editingModel->saveImagetoDB($_SESSION['id'], $this->thumbnailPath);
+
     }
 
 
@@ -105,8 +138,9 @@ class EditingController{
             $str = file_get_contents("php://input");
             $json = json_decode($str, true);
 
-            if ($this->saveImage($json['webcam'], $json['superposable'])){
-                // $this->saveImageDB("userid", "photopath");
+            if ($this->createImage($json['webcam'], $json['superposable'])){
+                $this->saveImagetoDB();
+                // $this->createImageDB("userid", "photopath");
                 echo json_encode(["message" => "Image succesfully saved!"]);
             } else{
                 echo json_encode(["message" => "Failed while saving image!"]);

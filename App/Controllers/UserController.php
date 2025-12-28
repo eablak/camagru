@@ -30,7 +30,7 @@ class UserController{
             }
         }else{
             return false;}
-            
+
         return true;
     }
 
@@ -68,9 +68,9 @@ class UserController{
 
 
     public function register(){
-        
+
         $this->file_path = $this->file_path . '/register.html';
-        
+
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             include $this->file_path;
             return ;
@@ -87,17 +87,17 @@ class UserController{
 
                 $activation_token = bin2hex(random_bytes(16));
                 $activation_token_hash = hash("sha256", $activation_token);
-                
+
                 $result = $this->userModel->register($name, $password, $email, $activation_token_hash);
 
                 $mail = $this->mailer();
-                
+
                 if ($result === 1){
                     $mail->setFrom('esrablk9@gmail.com', 'camagru');
                     $mail->addAddress($email);
                     $mail->Subject = "Account Activation";
                     $mail->Body = <<<END
-                    Click <a href="http://localhost:8000/activate_account?token=$activation_token">here</a> 
+                    Click <a href="http://localhost:8000/activate_account?token=$activation_token">here</a>
                     to activate your account.
                     END;
 
@@ -113,15 +113,15 @@ class UserController{
                 }elseif ($result === -2){
                     $message =  "Error: Saving";
                 }
-                
+
             }else{
                 $message = "Not safety values for register";
             }
             include $this->file_path;
-            
+
         }
-        
-        
+
+
     }
 
 
@@ -139,26 +139,28 @@ class UserController{
                 $message = "Invalid credentials!";
             }else{
                 session_start();
-                $_SESSION['username'] = $result['username'];
-                $name = $result['username'];
-                $message = "Welcome $name!";
+                $_SESSION['user'] = $result['username'];
+                $_SESSION['id'] = $result['id'];
+                // $name = $result['username'];
+                // $message = "Welcome $name!";
                 header("Location: /editing");
+                exit;
             }
 
         }
 
-        
+
         include $this->file_path . '/login.html';
     }
 
-    
+
     public function reset_password_mail(){
-        
+
         if ($_SERVER["REQUEST_METHOD"] === "GET"){
-            
+
             $token = $_GET["token"];
             $result = $this->userModel->reset_password_mail($token);
-    
+
             if ($result === -1)
                 die("Token not found!");
             elseif ($result === -2)
@@ -172,8 +174,8 @@ class UserController{
             $password = $_POST["password"];
             $password_confirmation = $_POST["password_confirmation"];
             $message = "";
-    
-    
+
+
             if (strlen($password) < 8)
                 $message = "Password must be at least 8 character";
             elseif (!preg_match("/[a-z]/i", $password))
@@ -203,17 +205,17 @@ class UserController{
         if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
             $email = $_POST['email'];
-            
+
             $token = $this->userModel->reset_password_hashes($email);
             if ($token){
-                
+
                 $mail = $this->mailer();
 
                 $mail->setFrom('esrablk9@gmail.com', 'camagru');
                 $mail->addAddress($email);
                 $mail->Subject = "Reset Password";
                 $mail->Body = <<<END
-                Click <a href="http://localhost:8000/reset_password_mail?token=$token">here</a> 
+                Click <a href="http://localhost:8000/reset_password_mail?token=$token">here</a>
                 to activate your account.
                 END;
 
