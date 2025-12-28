@@ -25,7 +25,7 @@ for(var i=0; i<radElem.length; i++){
 
 function updatePath(nameSelected){
 
-    var path = "/assets/img/thumbnails/";
+    var path = "/assets/img/superposable/";
     switch(nameSelected){
         case 'cat':
             path += 'img1.png';
