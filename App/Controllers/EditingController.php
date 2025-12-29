@@ -105,10 +105,11 @@ class EditingController{
             imagecopy($webcamImage, $resizedOverlay, $destX, $destY, 0, 0, $overlayW, $overlayH);
 
             
-            $this->thumbnailPath = str_replace('html', 'img/thumbnails/', $this->file_path);
-            $this->thumbnailPath = $this->thumbnailPath . $this->imageName();
-            imagejpeg($webcamImage, $this->thumbnailPath, 95);
+            $this->localPath = str_replace('html', 'img/thumbnails/', $this->file_path);
+            $this->localPath = $this->localPath . $this->imageName();
+            imagejpeg($webcamImage, $this->localPath, 95);
 
+            $this->thumbnailPath = '/assets/img/thumbnails/' . $this->imageName();
             return true;
         }
 
@@ -123,11 +124,10 @@ class EditingController{
     }
 
 
-
-
     public function editing_index(){
         
         if ($_SERVER["REQUEST_METHOD"] == "GET"){
+            $sideContentHtml = $this->sideContentImages();
             include $this->file_path . '/editing.html';
         }
 
@@ -148,6 +148,21 @@ class EditingController{
             return ;
         }
 
+
+    }
+
+
+    public function sideContentImages(){
+
+        $userid = $_SESSION['id'];
+        $imgPaths = $this->editingModel->getUserImagesPath($userid);
+
+        $html = '';
+        foreach ($imgPaths as $imgpath){
+            // error_log("PATH!!  ". $imgpath);
+            $html .= '<img src="' . htmlspecialchars($imgpath) . '" alt="User photo" />';
+        }
+        return $html;
 
     }
 

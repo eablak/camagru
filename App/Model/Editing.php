@@ -42,6 +42,17 @@ class Editing{
 
     }
 
+
+    public function getUserImagesPath(int $user_id){
+
+        $sql = "SELECT photo_path FROM galleries WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['user_id' => $user_id]);
+        $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $results;
+
+    }
+
 }
 
 

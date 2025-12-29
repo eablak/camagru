@@ -234,6 +234,15 @@ class UserController{
         include $this->file_path . '/reset_password.html';
     }
 
+
+    public function logout(){
+
+        session_start();
+        session_destroy();
+        header("Location: /login");
+
+    }
+
 }
 
 

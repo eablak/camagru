@@ -151,6 +151,15 @@ footer {
     background: whitesmoke;
     border-radius: 12px;
     padding: 40px;
+    max-height:  900px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#side-content img{
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 #video {
