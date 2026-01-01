@@ -68,8 +68,20 @@
                 <button onclick='closeCamera()'>Close Camera</button>
             </div>
 
+            <br>
+
+            <form action="" method="post" enctype="multipart/form-data">
+                <br>
+                <input id="fileToUpload" type="file" name="fileToUpload" id="fileToUpload">
+                <input id="fileSubmit" type="submit" value="Upload Image" name="fileSubmit">
+                <input type="hidden" id="actionFileUpload" name="actionFileUpload">
+                <div id="inform"></div>
+
+            </form>
+
+
             <div id="superposable-container">
-                
+                <br>
                 <label>
                     <input class='obj' type="radio" name="obj" onclick="enable()" id="cat" value="cat"/>
                     <img src="/assets/img/superposable/img1.png">

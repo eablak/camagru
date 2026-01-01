@@ -37,6 +37,7 @@ $router->post('/process_reset_password', [UserController::class, 'process_reset_
 $router->get('/editing', [EditingController::class, 'editing_index']);
 $router->post('/editing', [EditingController::class, 'editing_index']);
 $router->get('/logout', [UserController::class, 'logout']);
+$router->post('/fileSubmit', [EditingController::class, 'fileSubmit']);
 
 echo $router->resolve();
 

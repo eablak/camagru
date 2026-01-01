@@ -133,18 +133,28 @@ class EditingController{
 
         if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
-            header('Content-Type: application/json; charset=utf-8');
+            if (isset($_POST['actionFileUpload'])){
+                if ($this->fileSubmit()){
+                    // a
+                }
+            }else if(!empty(file_get_contents("php://input"))){
+                
+                header('Content-Type: application/json; charset=utf-8');
+    
+                $str = file_get_contents("php://input");
+                $json = json_decode($str, true);
+    
+                if ($this->createImage($json['webcam'], $json['superposable'])){
+                    $this->saveImagetoDB();
+                    echo json_encode(["message" => "Image succesfully saved!"]);
+                } else{
+                    echo json_encode(["message" => "Failed while saving image!"]);
+                }
 
-            $str = file_get_contents("php://input");
-            $json = json_decode($str, true);
-
-            if ($this->createImage($json['webcam'], $json['superposable'])){
-                $this->saveImagetoDB();
-                // $this->createImageDB("userid", "photopath");
-                echo json_encode(["message" => "Image succesfully saved!"]);
-            } else{
-                echo json_encode(["message" => "Failed while saving image!"]);
+            }else{
+                header("HTTP/1.0 404 Not Found");
             }
+
             return ;
         }
 
@@ -165,6 +175,47 @@ class EditingController{
         return $html;
 
     }
+
+
+    public function fileSubmit(){
+
+        header('Content-Type: application/json; charset=utf-8');
+
+        if (isset($_FILES["fileToUpload"]) && $_FILES["fileToUpload"]["error"] == 0){
+            
+            $allowed_ext = array("jpeg" => "img/jpeg");
+            
+            $file_name = $_FILES["fileToUpload"]["name"];
+            $file_type = $_FILES["fileToUpload"]["type"];
+            $file_size = $_FILES["fileToUpload"]["size"];
+
+            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
+
+            if (!array_key_exists($ext, $allowed_ext)){
+                // die("Error: Please select a valid file format.");
+                echo json_encode(["message" => "Error: Please select a valid file format."]);
+                return ;
+            }
+
+            $target_dir = str_replace('/html', '/img/pictures/', $this->file_path);
+            $target_file = $target_dir . "image.jpeg";
+
+            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)){
+                $str = "The file " . $_FILES["fileToUpload"]["name"] . " has been uploaded";
+                echo json_encode(["message" => $str]);
+            }
+
+        }else{
+            echo json_encode(["message" => "Uploaded Error"]);
+            return NULL;
+        }
+
+        return $target_file;
+
+    }
+
+
+
 
 
 }

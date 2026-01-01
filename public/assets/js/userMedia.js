@@ -10,6 +10,7 @@ const radElem = document.getElementsByName('obj');
 let canvas = document.querySelector('#canvas');
 let dataurl = document.querySelector('#dataurl');
 let dataurl_container = document.querySelector('#dataurl-container');
+const informElem = document.getElementById('inform');
 
 let receivedMediaStream = null;
 var prev = null;
@@ -76,6 +77,7 @@ const closeCamera = () => {
             mediaTrack.stop();
         });
         errorElem.innerHTML = "Camera closed successfully!";
+        errorElem.style.color = "green";
         errorElem.style.display = "block";
     }
     videoElem.srcObject = null;
@@ -99,17 +101,22 @@ function captureImage() {
     }
 
     if (!isSelected && !receivedMediaStream){
-        document.getElementById("error").innerHTML = "Open camera and choose superposable image!"
+        errorElem.innerHTML = "Open camera and choose superposable image!";
+        errorElem.style.color = "red";
+        errorElem.style.display = "block";
         return;
     }
     
     if (!isSelected){
-        document.getElementById("error").innerHTML = "Please choose superposable image first!";
+        errorElem.innerHTML = "Please choose superposable image first!";
+        errorElem.style.color = "red";
+        errorElem.style.display = "block";
         return;
     }
     
     if (!receivedMediaStream) {
         errorElem.innerHTML = "Open the camera first!";
+        errorElem.style.color = "red";
         errorElem.style.display = "block";
         return;
     }
@@ -135,4 +142,39 @@ function captureImage() {
     json_data = {"webcam": image_data_url, "superposable":nameSelected};
 
     xhr.send(JSON.stringify(json_data));
+}
+
+
+document.addEventListener('DOMContentLoaded', function(){
+
+    const form = document.querySelector('form[enctype="multipart/form-data"]');
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        handleFileUpload();
+    });
+
+});
+
+
+function handleFileUpload(){
+
+    const fileInput = document.getElementById('fileToUpload');
+
+    const formData = new FormData();
+    formData.append('fileToUpload', fileInput.files[0]);
+    formData.append('actionFileUpload', '1');
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/editing");
+
+    xhr.onload = function(){
+
+        const response = JSON.parse(xhr.responseText);
+        informElem.innerHTML = response.message;
+
+    }
+
+    xhr.send(formData);
+
 }
