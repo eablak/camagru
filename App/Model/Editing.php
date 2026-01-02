@@ -53,6 +53,14 @@ class Editing{
 
     }
 
+
+    public function deleteImage($imagePath){
+
+        $sql = "DELETE FROM galleries WHERE photo_path = :photo_path";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['photo_path' => $imagePath]);
+    }
+
 }
 
 

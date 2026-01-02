@@ -121,7 +121,7 @@ class EditingController{
 
             if (isset($_POST['actionFileUpload'])){
                 if ($this->fileSubmit()){
-                    error_log("IMAGEEEE");
+                    // error_log("IMAGEEEE");
                 }
                 return ;
             }
@@ -174,10 +174,14 @@ class EditingController{
 
         $userid = $_SESSION['id'];
         $imgPaths = $this->editingModel->getUserImagesPath($userid);
-
+        
         $html = '';
         foreach ($imgPaths as $imgpath){
+            $imgBaseName = substr(basename($imgpath), 0, strpos(basename($imgpath), ".")) ;
+            $html .= '<div data-image="' . $imgBaseName . '">';
+            $html .= '<button type="button" class="btn btn-danger" style="float: right;">Delete</button>'; 
             $html .= '<img src="' . htmlspecialchars($imgpath) . '" alt="User photo" />';
+            $html .= '</div>';
         }
         return $html;
 
@@ -217,6 +221,26 @@ class EditingController{
         }
 
         return $target_file;
+
+    }
+
+
+    public function deleteImage(){
+
+        $str = file_get_contents("php://input");
+        $json = json_decode($str, true);
+
+        $selectedImg = $json['imgData'];
+        $selectedImgPath = str_replace('/html', '/img/thumbnails/', $this->file_path);
+        $selectedImgPath .= $selectedImg . ".jpeg";
+        $selectedImgPathDb = strstr($selectedImgPath, "/assets");
+
+        error_log($selectedImgPath);
+        if (file_exists($selectedImgPath)){
+            if(unlink($selectedImgPath)){
+                $this->editingModel->deleteImage($selectedImgPathDb);
+            }
+        }
 
     }
 

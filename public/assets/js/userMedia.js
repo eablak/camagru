@@ -112,6 +112,7 @@ function captureImage() {
         errorElem.innerHTML = "Please choose superposable image first!";
         errorElem.style.color = "red";
         errorElem.style.display = "block";
+        
         return;
     }
     
@@ -185,3 +186,22 @@ function handleFileUpload(){
     xhr.send(formData);
 
 }
+
+let x = document.querySelectorAll(".btn-danger");
+let j;
+for (j=0; j<x.length; j++){
+    x[j].addEventListener("click", function(){
+        this.style.backgroundColor = "black";
+        this.disabled = true;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete");
+        xhr.setRequestHeader("Content-type", 'application/json');
+
+        imgJson = {"imgData": this.closest("div").dataset.image};
+        xhr.send(JSON.stringify(imgJson));
+
+    })
+}
+
+
