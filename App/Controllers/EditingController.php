@@ -37,19 +37,10 @@ class EditingController{
     }
 
 
-    public function createImage(string $imageURL, string $selectedName){
+    public function createImage(string $imgFilePath, string $selectedName){
 
 
-        $imageContent = base64_decode(str_replace("data:image/jpeg;base64,", "", $imageURL));
-
-        $imgFilePath = str_replace('/html', '/img/pictures/' ,$this->file_path);
-        $imgFilePath = $imgFilePath . "/image.jpeg";
-
-        $ifp = fopen($imgFilePath, 'wb');
-        if (fwrite($ifp, $imageContent)){
-            fclose($ifp);
-
-            $superposablePath = str_replace('/html', '/img/superposable/', $this->file_path);
+        $superposablePath = str_replace('/html', '/img/superposable/', $this->file_path);
             switch($selectedName){
                 case 'cat':
                     $superposablePath .= 'img1.png';
@@ -67,8 +58,6 @@ class EditingController{
                     $superposablePath .= 'img5.png';
                 break;
             }
-
-            // error_log("superposable: " . $superposablePath);
 
             $webcamImage = imagecreatefromjpeg($imgFilePath);
             $pasteImage = imagecreatefrompng($superposablePath);
@@ -111,9 +100,6 @@ class EditingController{
 
             $this->thumbnailPath = '/assets/img/thumbnails/' . $this->imageName();
             return true;
-        }
-
-        return false;
     }
 
 
@@ -135,27 +121,49 @@ class EditingController{
 
             if (isset($_POST['actionFileUpload'])){
                 if ($this->fileSubmit()){
-                    // a
+                    error_log("IMAGEEEE");
                 }
-            }else if(!empty(file_get_contents("php://input"))){
+                return ;
+            }
+            
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            if(str_contains($contentType, 'application/json')){
                 
                 header('Content-Type: application/json; charset=utf-8');
     
                 $str = file_get_contents("php://input");
                 $json = json_decode($str, true);
     
-                if ($this->createImage($json['webcam'], $json['superposable'])){
+                $imgFilePath = str_replace('/html', '/img/pictures/' ,$this->file_path);
+                $imgFilePath = $imgFilePath . "/image.jpeg";
+
+                if (isset($json["webcam"])){
+
+                    $imageContent = base64_decode(str_replace("data:image/jpeg;base64,", "", $json["webcam"]));
+
+                    $ifp = fopen($imgFilePath, 'wb');
+                    if (fwrite($ifp, $imageContent)){
+                        fclose($ifp);
+                    }else{
+                        echo json_encode(["message" => "Failed while creating image!"]);
+                        return ;
+                    }
+                }
+                
+                if ($this->createImage($imgFilePath, $json['superposable'])){
                     $this->saveImagetoDB();
                     echo json_encode(["message" => "Image succesfully saved!"]);
                 } else{
                     echo json_encode(["message" => "Failed while saving image!"]);
                 }
 
-            }else{
-                header("HTTP/1.0 404 Not Found");
-            }
+                return ;
 
+            }
+        
+            header("HTTP/1.0 404 Not Found");
             return ;
+
         }
 
 
@@ -169,7 +177,6 @@ class EditingController{
 
         $html = '';
         foreach ($imgPaths as $imgpath){
-            // error_log("PATH!!  ". $imgpath);
             $html .= '<img src="' . htmlspecialchars($imgpath) . '" alt="User photo" />';
         }
         return $html;
@@ -192,7 +199,6 @@ class EditingController{
             $ext = pathinfo($file_name, PATHINFO_EXTENSION);
 
             if (!array_key_exists($ext, $allowed_ext)){
-                // die("Error: Please select a valid file format.");
                 echo json_encode(["message" => "Error: Please select a valid file format."]);
                 return ;
             }

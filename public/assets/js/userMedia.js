@@ -14,6 +14,7 @@ const informElem = document.getElementById('inform');
 
 let receivedMediaStream = null;
 var prev = null;
+let isUpload = null;
 
 for(var i=0; i<radElem.length; i++){
     radElem[i].addEventListener('change', function() {
@@ -100,8 +101,8 @@ function captureImage() {
         }
     }
 
-    if (!isSelected && !receivedMediaStream){
-        errorElem.innerHTML = "Open camera and choose superposable image!";
+    if (!isSelected && !receivedMediaStream && !isUpload){
+        errorElem.innerHTML = "Open camera or upload any image and choose superposable image!";
         errorElem.style.color = "red";
         errorElem.style.display = "block";
         return;
@@ -114,18 +115,19 @@ function captureImage() {
         return;
     }
     
-    if (!receivedMediaStream) {
-        errorElem.innerHTML = "Open the camera first!";
+    if (!receivedMediaStream && !isUpload) {
+        errorElem.innerHTML = "Open the camera or select image first!";
         errorElem.style.color = "red";
         errorElem.style.display = "block";
         return;
     }
 
-    canvas.getContext('2d').drawImage(videoElem, 0, 0, canvas.width, canvas.height);
-    let image_data_url = canvas.toDataURL('image/jpeg');
-    
-    // dataurl.value = image_data_url;
-    // dataurl_container.style.display = 'block';
+    let image_data_url = null;
+    if (!isUpload){
+        canvas.getContext('2d').drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+        image_data_url = canvas.toDataURL('image/jpeg');
+    }
+
     
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "editing");
@@ -139,7 +141,11 @@ function captureImage() {
         errorElem.innerHTML = response.message;
     }
 
-    json_data = {"webcam": image_data_url, "superposable":nameSelected};
+    if (!isUpload){
+        json_data = {"webcam": image_data_url, "superposable":nameSelected};
+    }else{
+        json_data = {"superposable":nameSelected};
+    }
 
     xhr.send(JSON.stringify(json_data));
 }
@@ -164,6 +170,7 @@ function handleFileUpload(){
     const formData = new FormData();
     formData.append('fileToUpload', fileInput.files[0]);
     formData.append('actionFileUpload', '1');
+    isUpload = true;
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/editing");
