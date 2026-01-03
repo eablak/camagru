@@ -11,6 +11,7 @@ let canvas = document.querySelector('#canvas');
 let dataurl = document.querySelector('#dataurl');
 let dataurl_container = document.querySelector('#dataurl-container');
 const informElem = document.getElementById('inform');
+const captureButtonElem = document.getElementById('captureButton');
 
 let receivedMediaStream = null;
 var prev = null;
@@ -22,6 +23,8 @@ for(var i=0; i<radElem.length; i++){
             prev = this;
         // console.log(this.value);
         updatePath(this.value);
+        captureButtonElem.style.backgroundColor = "";
+        captureButtonElem.disabled = false;
     })
 }
 
