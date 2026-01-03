@@ -26,13 +26,7 @@ class EditingController{
 
     public function imageName(){
         
-        $currentUser = $_SESSION['user'];
-        $currentUserid = $_SESSION['id'];
-
-        $returnCount = $this->editingModel->userPhotoCount((int)($currentUserid));
-        
-        $fileName = "user_" . $currentUserid . "photo_" . $returnCount+1 . ".jpeg";
-        
+        $fileName = strval(rand(10000,100000)) . ".jpeg";
         return $fileName;
     }
 
@@ -95,10 +89,11 @@ class EditingController{
 
             
             $this->localPath = str_replace('html', 'img/thumbnails/', $this->file_path);
-            $this->localPath = $this->localPath . $this->imageName();
+            $fileName = $this->imageName();
+            $this->localPath = $this->localPath . $fileName;
             imagejpeg($webcamImage, $this->localPath, 95);
 
-            $this->thumbnailPath = '/assets/img/thumbnails/' . $this->imageName();
+            $this->thumbnailPath = '/assets/img/thumbnails/' . $fileName;
             return true;
     }
 
@@ -235,7 +230,6 @@ class EditingController{
         $selectedImgPath .= $selectedImg . ".jpeg";
         $selectedImgPathDb = strstr($selectedImgPath, "/assets");
 
-        error_log($selectedImgPath);
         if (file_exists($selectedImgPath)){
             if(unlink($selectedImgPath)){
                 $this->editingModel->deleteImage($selectedImgPathDb);
