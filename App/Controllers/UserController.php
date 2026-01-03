@@ -141,8 +141,8 @@ class UserController{
                 session_start();
                 $_SESSION['user'] = $result['username'];
                 $_SESSION['id'] = $result['id'];
-                // $name = $result['username'];
-                // $message = "Welcome $name!";
+                $_SESSION['password'] = $result['password'];
+                $_SESSION['email'] = $result['email'];
                 header("Location: /editing");
                 exit;
             }
@@ -241,6 +241,48 @@ class UserController{
         session_destroy();
         header("Location: /login");
 
+    }
+
+
+    public function features(){
+
+        session_start();
+        if(!isset($_SESSION['user'])){
+            header("Location: /login");
+            exit;
+        }
+        
+        $username = $_SESSION['user'];
+        $password = $_SESSION['password'];
+        $email = $_SESSION['email'];
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $new_username = $_POST['username'];
+            $new_password = $_POST['password'];
+            $new_email = $_POST['email'];
+
+            error_log($username . " " . $password . " " . $email);
+            error_log($new_username . " " . $new_password . " " . $new_email);
+
+            if ($new_username && $new_password && $new_email){
+                if (password_verify($new_password, $password) && $new_username == $username && $new_email == $email){
+                    $message = "Everything is same nothing updated!";
+                }else{
+                    if ($this->check_infos($new_email, $new_password)){
+                        $new_password = password_hash($new_password, PASSWORD_DEFAULT);
+                        $this->userModel->updateInfos($new_username, $new_password, $new_email, $_SESSION['id']);
+                        $message = "Sucessfully updated";
+                    }else{
+                        $message = "Not valid parameters";
+                    }
+                }
+            }else{
+                $message = "No empty value nothing updated!";
+            }
+
+        }
+
+        include $this->file_path . '/features.html';
     }
 
 }

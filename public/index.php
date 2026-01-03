@@ -39,6 +39,8 @@ $router->post('/editing', [EditingController::class, 'editing_index']);
 $router->get('/logout', [UserController::class, 'logout']);
 $router->post('/fileSubmit', [EditingController::class, 'fileSubmit']);
 $router->post('/delete', [EditingController::class, 'deleteImage']);
+$router->get('/features', [UserController::class, 'features']);
+$router->post('/features', [UserController::class, 'features']);
 
 echo $router->resolve();
 

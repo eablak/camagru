@@ -155,6 +155,13 @@ class User{
     }
 
 
+    public function updateInfos(string $new_username, string $new_password, string $new_email, int $id){
+
+        $sql = "UPDATE users SET username = :username, password= :password, email = :email WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['username' => $new_username, 'password' => $new_password, 'email' => $new_email, 'id' => $id]);
+
+    }
 
 }
 
