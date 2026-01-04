@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gallery Page</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+        <link href="/assets/css/gallery.css" rel="stylesheet" type="text/css" media="all" />
+        
+    </head>
+<body>
+
+	<header>
+        <?php if($condition) : ?>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+            
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">Settings</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                        
+                    </ul>
+                </div>
+            </nav>
+        <?php endif; ?>
+	</header>
+
+
+	<main id="content">
+        <section id="main-content"> 
+            
+            <?php foreach($descImgPaths as $imgPath): ?>
+
+                <img src="<?= htmlspecialchars($imgPath) ?>" alt="gallery image">
+
+
+
+            <?php endforeach; ?>
+
+
+        </section>
+
+    </main>
+
+    
+	 <footer>
+		<p class="p">Author: eablak</p>
+		<p class="p"><a href="#">eablak@student.42istanbul.com.tr</a></p>
+	</footer> 
+
+</body>
+
+</html>

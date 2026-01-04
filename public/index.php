@@ -16,13 +16,12 @@ include ("database.php");
 
 
 use App\Router;
-use App\Controllers\HomeController;
 use App\Controllers\UserController;
 use App\Controllers\EditingController;
+use App\Controllers\GalleryController;
 
 $router = new Router();
 
-$router->get('/', [HomeController::class, 'index']);
 $router->get('/register', [UserController::class, 'register']);
 $router->post('/register', [UserController::class, 'register']);
 $router->get('/activate_account', [UserController::class, 'activate_account']);
@@ -41,6 +40,7 @@ $router->post('/fileSubmit', [EditingController::class, 'fileSubmit']);
 $router->post('/delete', [EditingController::class, 'deleteImage']);
 $router->get('/features', [UserController::class, 'features']);
 $router->post('/features', [UserController::class, 'features']);
+$router->get('/gallery', [GalleryController::class, 'gallery_index']);
 
 echo $router->resolve();
 
