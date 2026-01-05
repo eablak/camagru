@@ -27,12 +27,26 @@ class GalleryController{
     public function gallery_index(){
 
         $condition = $this->userInfo;
-        $descImgPaths = $this->galleryModel->getAllImages();
+        $totalResults = $this->galleryModel->getAllImagesCount();
+        $resultPerPage = 5;
+        $totalPages = ceil($totalResults / $resultPerPage);
 
-        // foreach ($descImgPaths as $imgPath)
-            // error_log($imgPath);
-        
+        if (isset($_GET['page'])){
+            $page = (int) $_GET['page'];
+        }else{
+            $page = 1;
+        }
+
+        $page = max(1, min($page, $totalPages));
+        $startFrom = ($page - 1) * $resultPerPage;
+
+        $relatedImages = $this->galleryModel->getRelatedImages($startFrom, $resultPerPage);
+
         include $this->file_path . '/gallery.html';
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST"){
+            error_log();
+        }
 
     }
 

@@ -13,12 +13,28 @@ class Gallery{
     }
 
 
-    public function getAllImages(){
+    public function getAllImagesCount(){
 
-        $sql = "SELECT photo_path FROM galleries ORDER BY created_date DESC";
+        $sql = "SELECT COUNT(id) AS total FROM galleries";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+    }
+
+
+    public function getRelatedImages(int $startFrom, int $resultPerPage){
+
+        $sql = "SELECT * FROM galleries LIMIT :startFrom, :resultsPerPage";
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindValue(':startFrom', $startFrom, PDO::PARAM_INT);
+        $stmt->bindValue(':resultsPerPage', $resultPerPage, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     }
 

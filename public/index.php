@@ -41,6 +41,7 @@ $router->post('/delete', [EditingController::class, 'deleteImage']);
 $router->get('/features', [UserController::class, 'features']);
 $router->post('/features', [UserController::class, 'features']);
 $router->get('/gallery', [GalleryController::class, 'gallery_index']);
+$router->post('/gallery', [GalleryController::class, 'gallery_index']);
 
 echo $router->resolve();
 
