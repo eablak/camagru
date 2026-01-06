@@ -25,7 +25,7 @@ class Gallery{
 
     public function getRelatedImages(int $startFrom, int $resultPerPage){
 
-        $sql = "SELECT * FROM galleries LIMIT :startFrom, :resultsPerPage";
+        $sql = "SELECT * FROM galleries ORDER BY created_date DESC LIMIT :startFrom, :resultsPerPage";
         $stmt = $this->conn->prepare($sql);
 
         $stmt->bindValue(':startFrom', $startFrom, PDO::PARAM_INT);

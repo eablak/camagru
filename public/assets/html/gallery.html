@@ -40,35 +40,39 @@
 
 
 	<main id="content">
+
         <section id="main-content"> 
-            
+
             <?php foreach($relatedImages as $relatedImg): ?>
+                <div class="image-container">
+                    <img class="gallery-img" src="<?= $relatedImg['photo_path']; ?>" alt="Photo">
 
-                <!-- <img src="<?= htmlspecialchars($relatedImg['']) ?>" alt="gallery image"> -->
-                <img src="<?= $relatedImg['photo_path']; ?>" alt="Photo">
+                    <?php if($condition) : ?>
+                        <div class="image-actions">
+                            <button type="button" class="btn btn-success">Like</button>
+                            <button type="button" class="btn btn-primary">Comment</button>
+                        </div>
+                    <?php endif; ?>
 
+                </div>
             <?php endforeach; ?>
 
 
+            <div class="pagination">
+                <?php if ($page > 1){ ?>
+                    <a href="?page=<?php echo $page - 1; ?>">&laquo; Prev</a>&nbsp;
+                <?php } ?>
+
+                <?php for($i=1; $i<=$totalPages; $i++){ ?>
+                    <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>&nbsp;
+                <?php } ?>
+
+                <?php if ($page < $totalPages){ ?>
+                    <a href="?page=<?php echo $page + 1; ?>">Next &raquo;</a>
+                <?php } ?>
+            </div>
+
         </section>
-
-
-        <div class="pagination">
-
-            <?php if ($page > 1){ ?>
-                <a href="?page=<?php echo $page - 1; ?>">&laquo; Prev</a>&nbsp;
-            <?php } ?>
-
-            <?php for($i=1; $i<=$totalPages; $i++){ ?>
-                <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>&nbsp;
-            <?php } ?>
-
-            <?php if ($page < $totalPages){ ?>
-                <a href="?page=<?php echo $page + 1; ?>">Next &raquo;</a>
-            <?php } ?>
-
-        </div>
-       
 
     </main>
 
