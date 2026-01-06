@@ -1,4 +1,5 @@
 const likeButtonElem = document.getElementsByClassName('like-button');
+const commentButtonElem = document.getElementsByClassName('comment-button');
 
 for (var i=0; i<likeButtonElem.length; i++){
     likeButtonElem[i].addEventListener('click', function(){
@@ -13,6 +14,23 @@ for (var i=0; i<likeButtonElem.length; i++){
         xhr.send(JSON.stringify(JsonResponse));
 
         this.style.backgroundColor = "grey";
+
+    })
+}
+
+for (var j=0; j<commentButtonElem.length; j++){
+    commentButtonElem[j].addEventListener('click', function(){
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "comment");
+        xhr.setRequestHeader("Content-type", 'application/json');
+
+        const relativeImage = this.closest(".image-container");
+        const imageId = relativeImage.dataset.imageId;
+        const commentText = relativeImage.querySelector("textarea").value;
+
+        console.log(imageId);
+        console.log(commentText);
 
     })
 }

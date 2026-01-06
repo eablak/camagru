@@ -21,7 +21,7 @@ user_id INT NOT NULL,
 photo_path VARCHAR(150) NOT NULL ,
 created_date DATETIME,
 
-FOREIGN KEY (user_id) REFERENCES users(id) )";
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)";
 
 
 $sql_like = "CREATE TABLE likes (
@@ -31,8 +31,8 @@ photo_id INT NOT NULL,
 
 UNIQUE (user_id, photo_id),
 
-FOREIGN KEY (user_id) REFERENCES users(id),
-FOREIGN KEY (photo_id) REFERENCES galleries(id) )";
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+FOREIGN KEY (photo_id) REFERENCES galleries(id) ON DELETE CASCADE)";
 
 
 $sql_comment = "CREATE TABLE comments (
@@ -41,8 +41,8 @@ user_id INT NOT NULL,
 photo_id INT NOT NULL,
 content VARCHAR(200) NOT NULL,
 
-FOREIGN KEY (user_id) REFERENCES users(id),
-FOREIGN KEY (photo_id) REFERENCES galleries(id) )";
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+FOREIGN KEY (photo_id) REFERENCES galleries(id) ON DELETE CASCADE)";
 
 
 try{
