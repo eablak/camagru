@@ -168,3 +168,24 @@ footer {
 .image-actions{
   margin-top: auto;
 }
+
+.pagination {
+  margin: 40px 0 80px 0;
+}
+
+.button {
+  color: white;
+  padding: 8px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 1px 1px;
+  cursor: pointer;
+  border-radius: 10px;
+ 
+  
+}
+
+.like-button {background-color: #04AA6D;}
+.comment-button {background-color: #008CBA;}

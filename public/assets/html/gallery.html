@@ -44,13 +44,13 @@
         <section id="main-content"> 
 
             <?php foreach($relatedImages as $relatedImg): ?>
-                <div class="image-container">
+                <div class="image-container" data-image-id="<?= $relatedImg['id']; ?>">
                     <img class="gallery-img" src="<?= $relatedImg['photo_path']; ?>" alt="Photo">
 
                     <?php if($condition) : ?>
                         <div class="image-actions">
-                            <button type="button" class="btn btn-success">Like</button>
-                            <button type="button" class="btn btn-primary">Comment</button>
+                            <button type="button" class="button like-button">Like / <?= $imgLikes[$relatedImg['id']]; ?></button>
+                            <button type="button" class="button comment-button">Comment</button>
                         </div>
                     <?php endif; ?>
 
@@ -83,5 +83,7 @@
 	</footer> 
 
 </body>
+
+<script src="/assets/js/imgActionHandler.js"></script>
 
 </html>

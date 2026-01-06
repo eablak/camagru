@@ -41,14 +41,30 @@ class GalleryController{
         $startFrom = ($page - 1) * $resultPerPage;
 
         $relatedImages = $this->galleryModel->getRelatedImages($startFrom, $resultPerPage);
+        
+        $imgLikes = [];
+        foreach($relatedImages as $relatedImg){
+            $likeCount = $this->galleryModel->relatedImagesLikes($relatedImg['id']);
+            $imgLikes[$relatedImg['id']] = $likeCount;
+        }
 
         include $this->file_path . '/gallery.html';
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST"){
-            error_log();
+    }
+
+
+    public function likeImage(){
+
+        $str = file_get_contents("php://input");
+        $json = json_decode($str, true);
+
+        if ($this->userInfo){
+            $currentId = $_SESSION['id'];
+            $this->galleryModel->saveLike($currentId, $json['imageId']);
         }
 
     }
+
 
 }
 

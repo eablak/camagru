@@ -35,10 +35,31 @@ class Gallery{
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    }
+
+
+    public function relatedImagesLikes(int $imgId){
+
+        $sql = "SELECT COUNT(*) FROM likes WHERE photo_id = :photo_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['photo_id' => $imgId]);
+
+        $likeCount = (int)$stmt->fetchColumn();
+        return $likeCount;
 
     }
 
 
+
+    public function saveLike(int $userId, int $imageId){
+
+        $sql = "INSERT IGNORE INTO likes (user_id, photo_id) VALUES (:user_id, :photo_id)";
+
+        $stmt = $this->conn->prepare($sql);
+        $result = $stmt->execute(['user_id' => $userId, 'photo_id' => $imageId]);
+        return $result;
+
+    }
 
 }
 

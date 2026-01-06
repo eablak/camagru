@@ -29,6 +29,8 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 user_id INT NOT NULL,
 photo_id INT NOT NULL,
 
+UNIQUE (user_id, photo_id),
+
 FOREIGN KEY (user_id) REFERENCES users(id),
 FOREIGN KEY (photo_id) REFERENCES galleries(id) )";
 
