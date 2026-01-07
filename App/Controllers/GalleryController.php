@@ -43,9 +43,13 @@ class GalleryController{
         $relatedImages = $this->galleryModel->getRelatedImages($startFrom, $resultPerPage);
         
         $imgLikes = [];
+        $imgComments = [];
         foreach($relatedImages as $relatedImg){
             $likeCount = $this->galleryModel->relatedImagesLikes($relatedImg['id']);
             $imgLikes[$relatedImg['id']] = $likeCount;
+            $comments = $this->galleryModel->relatedImagesComments($relatedImg['id']);
+            if ($comments)
+                $imgComments[$relatedImg['id']] = $comments;
         }
 
         include $this->file_path . '/gallery.html';
@@ -61,6 +65,19 @@ class GalleryController{
         if ($this->userInfo){
             $currentId = $_SESSION['id'];
             $this->galleryModel->saveLike($currentId, $json['imageId']);
+        }
+
+    }
+
+
+    public function commentImage(){
+
+        $str = file_get_contents("php://input");
+        $json = json_decode($str, true);
+
+        if ($this->userInfo){
+            $currentId = $_SESSION['id'];
+            $this->galleryModel->saveComment($currentId, $json['imageId'], $json['commentText']);
         }
 
     }

@@ -43,6 +43,7 @@ $router->post('/features', [UserController::class, 'features']);
 $router->get('/gallery', [GalleryController::class, 'gallery_index']);
 $router->post('/gallery', [GalleryController::class, 'gallery_index']);
 $router->post('/like', [GalleryController::class, 'likeImage']);
+$router->post('/comment', [GalleryController::class, 'commentImage']);
 
 echo $router->resolve();
 

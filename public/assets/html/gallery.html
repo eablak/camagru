@@ -48,26 +48,31 @@
                     <img class="gallery-img" src="<?= $relatedImg['photo_path']; ?>" alt="Photo">
 
                     <?php if($condition) : ?>
+
                         <div class="comments-container">
-                            
+                            <?php foreach($imgComments[$relatedImg['id']] as $imgComment): ?>
+                                <p>
+                                    <strong><?= htmlspecialchars($imgComment['username']); ?>:</strong>
+                                    <?= $imgComment['content']; ?>
+                                </p>
+                            <?php endforeach; ?>
                         </div>
+
                         <div class="like-actions">
                             <p class="like-count">Likes: <?= $imgLikes[$relatedImg['id']]; ?></p>
                             <button type="button" class="button like-button">Like</button>
                         </div>
+
                         <div class="comment-action-container">
                             <textarea name="comment-area" id="" placeholder="Type Your Comment"></textarea>
                             <button type="button" class="button comment-button">Comment</button>
                         </div>
+
                     <?php endif; ?>
-
-                        
-                    </div>
+                
+                </div>
                     
                     
-                    
-
-
             <?php endforeach; ?>
 
                 

@@ -29,8 +29,9 @@ for (var j=0; j<commentButtonElem.length; j++){
         const imageId = relativeImage.dataset.imageId;
         const commentText = relativeImage.querySelector("textarea").value;
 
-        console.log(imageId);
-        console.log(commentText);
+        commentJson = {"imageId": imageId, "commentText": commentText};
+        xhr.send(JSON.stringify(commentJson));
 
+        relativeImage.querySelector("textarea").value = "";
     })
 }

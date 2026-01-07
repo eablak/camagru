@@ -148,7 +148,7 @@ footer {
 
 .image-container {
   width: 500px;
-  height: 500px;
+  height: auto;
   border: 1px solid black;
   margin-bottom: 25px;
   overflow: hidden;
@@ -214,3 +214,8 @@ textarea {
   background-color: #008CBA;
   
 }
+
+.comments-container strong{
+  font-weight: bold;
+}
+
