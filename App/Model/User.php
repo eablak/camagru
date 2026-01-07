@@ -19,9 +19,9 @@ class User{
 
         try{
 
-            $stmt = $this->conn->prepare("INSERT INTO users (username, password, email, account_activation_hash) VALUES (:username, :password, :email, :activation_token_hash)");
+            $stmt = $this->conn->prepare("INSERT INTO users (username, password, email, email_notifier, account_activation_hash) VALUES (:username, :password, :email, :email_notifier, :activation_token_hash)");
             
-            $result = $stmt->execute(['username' => $username, 'password' => $password, 'email' => $email, 'activation_token_hash' => $activation_token_hash]);
+            $result = $stmt->execute(['username' => $username, 'password' => $password, 'email' => $email, 'email_notifier' => true ,'activation_token_hash' => $activation_token_hash]);
 
             return 1;
             
@@ -160,6 +160,26 @@ class User{
         $sql = "UPDATE users SET username = :username, password= :password, email = :email WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute(['username' => $new_username, 'password' => $new_password, 'email' => $new_email, 'id' => $id]);
+
+    }
+
+    public function changeEmailStatus(int $userId){
+
+        $sql = "UPDATE users SET email_notifier = NOT email_notifier WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        return ($stmt->execute(['id' => $userId]));
+
+    }
+
+    public function getCurrentEmailStatus(int $userId){
+        
+        $sql = "SELECT email_notifier FROM users WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $userId]);
+
+        return $stmt->fetchColumn();
 
     }
 

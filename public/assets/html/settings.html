@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login For CAMAGRU</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="/assets/css/settings.css" rel="stylesheet" type="text/css" media="all" />
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+</head>
+<body>
+
+	<header>
+		<h1 class="h1">Settings</h1>
+	</header>
+
+
+	<main class="main-w3layouts wrapper">
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+
+                <h3 class="register-msg">
+                    <?php if (!empty($message)) echo $message ?>
+                </h3>
+
+				<button class="button-status" id="button-status" onclick="changeStatus()">CHANGE STATUS</button>
+			</div>
+		</div>
+		<ul class="colorlib-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+
+		
+	</main>
+
+
+	 <footer>
+		<p class="p">Author: eablak</p>
+		<p class="p"><a href="#">eablak@student.42istanbul.com.tr</a></p>
+	</footer> 
+</body>
+
+<script>
+
+    function changeStatus(){
+        const buttonElem = document.getElementById("button-status");
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "settings");
+        xhr.setRequestHeader("Content-type", 'application/json');
+
+        buttonElem.style.backgroundColor = "grey";
+        buttonElem.disabled = true;
+
+        jsonResponse = {"click": true};
+        xhr.send(JSON.stringify(jsonResponse));
+
+    }
+
+</script>
+
+</html>

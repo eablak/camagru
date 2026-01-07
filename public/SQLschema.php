@@ -10,6 +10,7 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 username VARCHAR(30) NOT NULL UNIQUE,
 password VARCHAR(150) NOT NULL,
 email VARCHAR(50) NOT NULL UNIQUE,
+email_notifier BOOLEAN NOT NULL,
 account_activation_hash VARCHAR(150),
 reset_token_hash VARCHAR(150) UNIQUE,
 reset_token_expires_at DATETIME )";

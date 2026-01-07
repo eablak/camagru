@@ -44,6 +44,8 @@ $router->get('/gallery', [GalleryController::class, 'gallery_index']);
 $router->post('/gallery', [GalleryController::class, 'gallery_index']);
 $router->post('/like', [GalleryController::class, 'likeImage']);
 $router->post('/comment', [GalleryController::class, 'commentImage']);
+$router->get('/settings', [UserController::class, 'commentSettings']);
+$router->post('/settings', [UserController::class, 'commentSettings']);
 
 echo $router->resolve();
 

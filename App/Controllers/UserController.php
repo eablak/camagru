@@ -143,6 +143,7 @@ class UserController{
                 $_SESSION['id'] = $result['id'];
                 $_SESSION['password'] = $result['password'];
                 $_SESSION['email'] = $result['email'];
+                $_SESSION['email_notifier'] = $result['email_notifier'];
                 header("Location: /editing");
                 exit;
             }
@@ -284,6 +285,38 @@ class UserController{
 
         include $this->file_path . '/features.html';
     }
+
+
+    public function commentSettings(){
+
+        session_start();
+        if(!isset($_SESSION['user'])){
+            header("Location: /login");
+            exit;
+        }
+        
+        if ($_SERVER["REQUEST_METHOD"] == "POST"){
+            $str = file_get_contents("php://input");
+            $json = json_decode($str, true);
+            
+            if ($json['click']){
+                if ($this->userModel->changeEmailStatus($_SESSION['id'])){
+                    $_SESSION['email_notifier'] = $this->userModel->getCurrentEmailStatus($_SESSION['id']);
+                }
+            }
+        }
+        
+        $message = "Your current status for email notification is ";
+        if ($_SESSION['email_notifier'])
+            $message .= "active!";
+        else
+            $message .= "deactive!";
+        $message .= " Press button for change status!";
+
+
+        include $this->file_path . '/settings.html';
+    }
+
 
 }
 
