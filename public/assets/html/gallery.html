@@ -50,12 +50,14 @@
                     <?php if($condition) : ?>
 
                         <div class="comments-container">
-                            <?php foreach($imgComments[$relatedImg['id']] as $imgComment): ?>
-                                <p>
-                                    <strong><?= htmlspecialchars($imgComment['username']); ?>:</strong>
-                                    <?= $imgComment['content']; ?>
-                                </p>
-                            <?php endforeach; ?>
+                            <?php if(isset($imgComments[$relatedImg['id']])) : ?>
+                                <?php foreach($imgComments[$relatedImg['id']] as $imgComment): ?>
+                                    <p>
+                                        <strong><?= htmlspecialchars($imgComment['username']); ?>:</strong>
+                                        <?= $imgComment['content']; ?>
+                                    </p>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
 
                         <div class="like-actions">

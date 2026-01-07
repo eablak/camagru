@@ -82,6 +82,18 @@ class Gallery{
 
     }
 
+
+    public function getImageEmail(int $imageId){
+
+        $sql = "SELECT email FROM galleries g INNER JOIN users u on g.user_id = u.id WHERE g.id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $imageId]);
+
+        return $stmt->fetchColumn();
+
+    }
+
 }
 
 

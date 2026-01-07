@@ -1,8 +1,13 @@
 <?php
 
 namespace App\Controllers;
+
+require_once __DIR__ . '/../../public/vendor/autoload.php';
 use App\Database;
 use App\Model\Gallery;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 
 class GalleryController{
@@ -77,10 +82,55 @@ class GalleryController{
 
         if ($this->userInfo){
             $currentId = $_SESSION['id'];
-            $this->galleryModel->saveComment($currentId, $json['imageId'], $json['commentText']);
+            if ($this->galleryModel->saveComment($currentId, $json['imageId'], $json['commentText'])){
+                $imgOwnerEmail = $this->galleryModel->getImageEmail($json['imageId']);
+                if ($imgOwnerEmail)
+                    $this->sendEmailNotification($imgOwnerEmail);
+            }
         }
 
     }
+
+    public function mailer(){
+
+        $mail = new PHPMailer(true);
+
+        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
+        $mail->isSMTP();
+        $mail->SMTPAuth = true;
+
+        $mail->Host = "smtp.gmail.com";
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        $mail->Username = 'esrablk9@gmail.com';
+        $mail->Password = 'dupr rmfm riuu vwrr ';
+
+        $mail->isHtml(true);
+
+        return $mail;
+
+    }
+
+    public function sendEmailNotification(string $emailAddress){
+
+        $mail = $this->mailer();
+
+        $mail->setFrom('esrablk9@gmail.com', 'camagru');
+        $mail->addAddress($emailAddress);
+        $mail->Subject = "Comment Received";
+        $mail->Body = <<<END
+        Hi! Your Image get a new comment.
+        END;
+
+        try {
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer error: {$mail->ErrorInfo}";
+        }
+
+    }
+
 
 
 }
