@@ -25,6 +25,8 @@
 
 				<button class="button-status" id="button-status" onclick="changeStatus()">CHANGE STATUS</button>
 			</div>
+
+            <div id="info"></div>
 		</div>
 		<ul class="colorlib-bubbles">
 			<li></li>
@@ -51,15 +53,22 @@
 
 <script>
 
-    function changeStatus(){
-        const buttonElem = document.getElementById("button-status");
+	
+	function changeStatus(){
+		const buttonElem = document.getElementById("button-status");
         
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "settings");
         xhr.setRequestHeader("Content-type", 'application/json');
-
+		
         buttonElem.style.backgroundColor = "grey";
         buttonElem.disabled = true;
+		
+		xhr.onload = function(){
+			const response = JSON.parse(xhr.responseText);
+			document.getElementById('info').innerHTML = response.message;
+		}
+
 
         jsonResponse = {"click": true};
         xhr.send(JSON.stringify(jsonResponse));

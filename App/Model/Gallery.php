@@ -94,6 +94,18 @@ class Gallery{
 
     }
 
+
+    public function getEmailStatus(int $imgId){
+
+        $sql = "SELECT email_notifier FROM users u INNER JOIN galleries g on g.user_id = u.id WHERE g.id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $imgId]);
+
+        return $stmt->fetchColumn();
+
+    }
+
 }
 
 

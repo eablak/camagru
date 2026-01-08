@@ -570,3 +570,11 @@ footer {
     flex-direction: column;
     align-items: center;
 }
+
+#info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  color: rgb(177, 82, 5);
+}

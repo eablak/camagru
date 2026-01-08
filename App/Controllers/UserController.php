@@ -302,8 +302,14 @@ class UserController{
             if ($json['click']){
                 if ($this->userModel->changeEmailStatus($_SESSION['id'])){
                     $_SESSION['email_notifier'] = $this->userModel->getCurrentEmailStatus($_SESSION['id']);
+                    echo json_encode(["message" => "Status sucessfully changed!"]);
+                }
+                else{
+                    echo json_encode(["message" => "Failed to change status!"]);
                 }
             }
+
+            return ;
         }
         
         $message = "Your current status for email notification is ";

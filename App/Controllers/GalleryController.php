@@ -84,8 +84,11 @@ class GalleryController{
             $currentId = $_SESSION['id'];
             if ($this->galleryModel->saveComment($currentId, $json['imageId'], $json['commentText'])){
                 $imgOwnerEmail = $this->galleryModel->getImageEmail($json['imageId']);
-                if ($imgOwnerEmail)
-                    $this->sendEmailNotification($imgOwnerEmail);
+                if ($imgOwnerEmail){
+                    $userEmailStatus = $this->galleryModel->getEmailStatus($json['imageId']);
+                    if ($userEmailStatus)
+                        $this->sendEmailNotification($imgOwnerEmail);
+                }
             }
         }
 
