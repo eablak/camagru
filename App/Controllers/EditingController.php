@@ -7,6 +7,11 @@ use App\Model\Editing;
 class EditingController{
 
     var $file_path;
+    private $db;
+    private $editingModel;
+    private $thumbnailPath;
+    private $localPath;
+
 
     public function __construct(){
 

@@ -12,6 +12,11 @@ use PHPMailer\PHPMailer\Exception;
 
 class GalleryController{
 
+    private $userInfo;
+    private $file_path;
+    private $db;
+    private $galleryModel;
+
     public function __construct(){
         
         session_start();

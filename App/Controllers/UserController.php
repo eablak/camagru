@@ -13,6 +13,8 @@ use PHPMailer\PHPMailer\Exception;
 class UserController{
 
     var $file_path;
+    private $db;
+    private $userModel;
 
     public function __construct(){
         $this->file_path = dirname(__DIR__);

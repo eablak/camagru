@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception; 
 use PDO;
 use PDOException;
 
@@ -10,7 +11,7 @@ class Database{
     private static $username = "phpmyadmin";
     private static $password = "phpmyadmin";
     private static $db_name = "camagru";
-    private static $dsn = "mysql:host=localhost;dbname=camagru;charset=utf8";
+    private static $dsn = "mysql:host=db;dbname=camagru;charset=utf8";
 
     public static function connect(){
         try{
