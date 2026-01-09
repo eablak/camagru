@@ -1,4 +1,4 @@
 /public/assets/img/pictures/*.png
 /public/assets/img/pictures/*.jpeg
-/public/assets/img/thumbnails/*
+/public/assets/img/thumbnails/*.jpeg
 /mysql_data
