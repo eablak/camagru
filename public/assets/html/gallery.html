@@ -58,7 +58,7 @@
                                 <?php foreach($imgComments[$relatedImg['id']] as $imgComment): ?>
                                     <p>
                                         <strong><?= htmlspecialchars($imgComment['username']); ?>:</strong>
-                                        <?= $imgComment['content']; ?>
+                                        <?= htmlspecialchars($imgComment['content']); ?>
                                     </p>
                                 <?php endforeach; ?>
                             <?php endif; ?>
