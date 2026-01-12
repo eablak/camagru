@@ -146,9 +146,9 @@ function captureImage() {
     }
 
     if (!isUpload){
-        json_data = {"webcam": image_data_url, "superposable":nameSelected};
+        json_data = {"webcam": image_data_url, "superposable": nameSelected, "csrf_token": window.CSRF_TOKEN};
     }else{
-        json_data = {"superposable":nameSelected};
+        json_data = {"superposable": nameSelected, "csrf_token": window.CSRF_TOKEN};
     }
 
     xhr.send(JSON.stringify(json_data));
@@ -174,6 +174,7 @@ function handleFileUpload(){
     const formData = new FormData();
     formData.append('fileToUpload', fileInput.files[0]);
     formData.append('actionFileUpload', '1');
+    formData.append('csrf_token', window.CSRF_TOKEN);
     isUpload = true;
 
     var xhr = new XMLHttpRequest();
@@ -201,7 +202,7 @@ for (j=0; j<x.length; j++){
         xhr.open("POST", "delete");
         xhr.setRequestHeader("Content-type", 'application/json');
 
-        imgJson = {"imgData": this.closest("div").dataset.image};
+        imgJson = {"imgData": this.closest("div").dataset.image, "csrf_token": window.CSRF_TOKEN};
         xhr.send(JSON.stringify(imgJson));
 
     })

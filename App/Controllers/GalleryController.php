@@ -37,6 +37,10 @@ class GalleryController{
     public function gallery_index(){
 
         $condition = $this->userInfo;
+        if ($condition && !isset($_SESSION['csrf_token'])){
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+       
         $totalResults = $this->galleryModel->getAllImagesCount();
         $resultPerPage = 5;
         $totalPages = ceil($totalResults / $resultPerPage);
@@ -73,6 +77,12 @@ class GalleryController{
         $json = json_decode($str, true);
 
         if ($this->userInfo){
+
+            if (!isset($json['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $json['csrf_token'])){
+                http_response_code(403);
+                return;
+            }
+
             $currentId = $_SESSION['id'];
             $this->galleryModel->saveLike($currentId, $json['imageId']);
         }
@@ -86,6 +96,12 @@ class GalleryController{
         $json = json_decode($str, true);
 
         if ($this->userInfo){
+
+            if (!isset($json['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($json['csrf_token'], $_SESSION['csrf_token'])){
+                http_response_code(403);
+                return;
+            }
+
             $currentId = $_SESSION['id'];
             if ($this->galleryModel->saveComment($currentId, $json['imageId'], $json['commentText'])){
                 $imgOwnerEmail = $this->galleryModel->getImageEmail($json['imageId']);

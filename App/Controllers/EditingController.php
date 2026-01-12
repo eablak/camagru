@@ -114,26 +114,28 @@ class EditingController{
         
         if ($_SERVER["REQUEST_METHOD"] == "GET"){
             $sideContentHtml = $this->sideContentImages();
+            if(!isset($_SESSION['csrf_token'])){
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            }
+           
             include $this->file_path . '/editing.html';
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST"){
-
-            if (isset($_POST['actionFileUpload'])){
-                if ($this->fileSubmit()){
-                    // error_log("IMAGEEEE");
-                }
-                return ;
-            }
-            
             $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
             if(str_contains($contentType, 'application/json')){
                 
                 header('Content-Type: application/json; charset=utf-8');
-    
+
                 $str = file_get_contents("php://input");
                 $json = json_decode($str, true);
-    
+
+                if (!isset($json['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($json['csrf_token'], $_SESSION['csrf_token'])){
+                    http_response_code(403);
+                    return;
+                }
+
                 $imgFilePath = str_replace('/html', '/img/pictures/' ,$this->file_path);
                 $imgFilePath = $imgFilePath . "/image.jpeg";
 
@@ -159,6 +161,18 @@ class EditingController{
 
                 return ;
 
+            }
+
+            if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_POST['csrf_token'], $_SESSION['csrf_token'])){
+                http_response_code(403);
+                return;
+            }
+
+            if (isset($_POST['actionFileUpload'])){
+                if ($this->fileSubmit()){
+                    // error_log("IMAGEEEE");
+                }
+                return ;
             }
         
             header("HTTP/1.0 404 Not Found");
@@ -229,6 +243,11 @@ class EditingController{
 
         $str = file_get_contents("php://input");
         $json = json_decode($str, true);
+
+        if (!isset($json['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $json['csrf_token'])){
+            http_response_code(403);
+            return;
+        }
 
         $selectedImg = $json['imgData'];
         $selectedImgPath = str_replace('/html', '/img/thumbnails/', $this->file_path);

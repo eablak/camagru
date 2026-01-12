@@ -9,7 +9,7 @@ for (var i=0; i<likeButtonElem.length; i++){
         xhr.setRequestHeader("Content-type", 'application/json');
 
         const imageId = this.closest(".image-container").dataset.imageId;
-        JsonResponse = {"imageId" : imageId};
+        JsonResponse = {"imageId" : imageId, "csrf_token": window.CSRF_TOKEN};
 
         xhr.send(JSON.stringify(JsonResponse));
 
@@ -29,7 +29,7 @@ for (var j=0; j<commentButtonElem.length; j++){
         const imageId = relativeImage.dataset.imageId;
         const commentText = relativeImage.querySelector("textarea").value;
 
-        commentJson = {"imageId": imageId, "commentText": commentText};
+        commentJson = {"imageId": imageId, "commentText": commentText, "csrf_token": window.CSRF_TOKEN};
         xhr.send(JSON.stringify(commentJson));
 
         relativeImage.querySelector("textarea").value = "";
