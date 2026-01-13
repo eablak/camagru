@@ -20,7 +20,7 @@ class Database{
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // echo "Connection success";
         }catch (PDOException $e){
-            error_log(date('Y-m-d: H:i:s') . "Database connection error" . $e->getMessage(), 3, "error.log");
+            // error_log(date('Y-m-d: H:i:s') . "Database connection error" . $e->getMessage(), 3, "error.log");
             throw new Exception("Database connection failed");
         }
 

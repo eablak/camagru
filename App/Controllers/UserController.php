@@ -264,9 +264,6 @@ class UserController{
             $new_password = $_POST['password'];
             $new_email = $_POST['email'];
 
-            error_log($username . " " . $password . " " . $email);
-            error_log($new_username . " " . $new_password . " " . $new_email);
-
             if ($new_username && $new_password && $new_email){
                 if (password_verify($new_password, $password) && $new_username == $username && $new_email == $email){
                     $message = "Everything is same nothing updated!";
